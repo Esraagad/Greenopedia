@@ -17,9 +17,12 @@ import com.example.greenopedia.ui.viewmodels.PlantsViewModel
 import com.example.greenopedia.utils.Constants.QUERY_PAGE_SIZE
 import com.example.greenopedia.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
+import com.example.greenopedia.R
+import com.example.greenopedia.data.remote.responses.Data
+import com.example.greenopedia.ui.OnItemClickListener
 
 @AndroidEntryPoint
-class PlantsListFragment : Fragment() {
+class PlantsListFragment : Fragment(), OnItemClickListener {
     private val viewModel: PlantsViewModel by viewModels()
     private lateinit var plantsListAdapter: PlantsListAdapter
     private lateinit var binding: FragmentPlantsListBinding
@@ -41,7 +44,7 @@ class PlantsListFragment : Fragment() {
     }
 
     private fun setupPlantsRecyclerView() {
-        plantsListAdapter = PlantsListAdapter()
+        plantsListAdapter = PlantsListAdapter(this)
         binding.plantsRecyclerView.apply {
             adapter = plantsListAdapter
             layoutManager = LinearLayoutManager(activity)
@@ -140,5 +143,15 @@ class PlantsListFragment : Fragment() {
                 isScrolling = false
             }
         }
+    }
+
+    override fun onItemClicked(plant: Data) {
+            val bundle = Bundle().apply {
+                putSerializable("plant", plant)
+            }
+            findNavController().navigate(
+                R.id.action_plantsListFragment_to_plantDetailsFragment,
+                bundle
+            )
     }
 }

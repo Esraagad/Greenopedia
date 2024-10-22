@@ -21,5 +21,9 @@
         android:id="@+id/plantDetailsFragment"
         android:name="com.example.greenopedia.ui.fragments.PlantDetailsFragment"
         android:label="fragment_plant_details"
-        tools:layout="@layout/fragment_plant_details" />
+        tools:layout="@layout/fragment_plant_details" >
+        <argument
+            android:name="plant"
+            app:argType="com.example.greenopedia.data.remote.responses.Data" />
+    </fragment>
 </navigation>

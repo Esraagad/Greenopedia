@@ -3,32 +3,33 @@ package com.example.greenopedia.data.remote.responses
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 @Entity(tableName = "plants")
 data class Data(
     @PrimaryKey(autoGenerate = true)
-    var pid: Int? = 0,
-    val author: String = "NA",
-    val bibliography: String = "NA",
+    var pid: Int,
+    val author: String?,
+    val bibliography: String?,
     @SerializedName("common_name")
-    val commonName: String = "NA",
-    val family: String = "NA",
+    val commonName: String?,
+    val family: String?,
     @SerializedName("family_common_name")
-    val familyCommonName: String = "NA",
-    val genus: String = "NA",
+    val familyCommonName: String?,
+    val genus: String?,
     @SerializedName("genus_id")
-    val genusId: Int = 0,
+    val genusId: Int?,
     @SerializedName("id")
-    val plantId: Int = 0,
+    val plantId: Int?,
     @SerializedName("image_url")
-    val imageUrl: String = "NA",
-    val links: Links? = null,
-    val rank: String = "NA",
+    val imageUrl: String?,
+    val links: Links?,
+    val rank: String?,
     @SerializedName("scientific_name")
-    val scientificName: String = "NA",
-    val slug: String = "NA",
-    val status: String = "NA",
-    val synonyms: List<String>? = null,
-    val year: Int = 0,
-    val timestamp: Long = 0
-)
+    val scientificName: String?,
+    val slug: String?,
+    val status: String?,
+    val synonyms: List<String>?,
+    val year: Int?,
+    val timestamp: Long?
+): Serializable
