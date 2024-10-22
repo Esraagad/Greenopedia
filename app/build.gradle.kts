@@ -92,7 +92,7 @@ dependencies {
     // Activity KTX for viewModels()
     implementation(libs.androidx.activity.ktx)
 
-
+    implementation (libs.gson)
 
 
 
