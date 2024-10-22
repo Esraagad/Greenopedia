@@ -1,4 +1,4 @@
-package com.example.greenopedia
+package com.example.greenopedia.ui.activities
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
