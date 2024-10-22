@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName
 @Entity(tableName = "plants")
 data class Data(
     @PrimaryKey(autoGenerate = true)
-    var id: Int? = 0,
+    var pid: Int? = 0,
     val author: String = "NA",
     val bibliography: String = "NA",
     @SerializedName("common_name")
@@ -29,5 +29,6 @@ data class Data(
     val slug: String = "NA",
     val status: String = "NA",
     val synonyms: List<String>? = null,
-    val year: Int = 0
+    val year: Int = 0,
+    val timestamp: Long = 0
 )

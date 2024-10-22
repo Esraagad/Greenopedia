@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Greenopedia</string>
+
+    <string name="label_plant_name">Name</string>
+    <string name="label_plant_publication_year">Year</string>
+    <string name="label_plant_IPNI_status">Status</string>
+    <string name="btn_retry">Retry</string>
+    <string name="error_message_fail_to_connect">Network Failure</string>
 </resources>
