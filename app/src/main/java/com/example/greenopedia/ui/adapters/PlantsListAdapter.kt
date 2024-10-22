@@ -7,9 +7,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.greenopedia.data.remote.responses.Data
 import com.example.greenopedia.databinding.ItemPlantBinding
+import com.example.greenopedia.ui.OnItemClickListener
 import com.example.greenopedia.ui.viewholders.PlantsViewHolder
 
-class PlantsListAdapter : RecyclerView.Adapter<PlantsViewHolder>(){
+class PlantsListAdapter(val listener: OnItemClickListener) :
+    RecyclerView.Adapter<PlantsViewHolder>() {
 
     private val differCallback = object : DiffUtil.ItemCallback<Data>() {
         override fun areItemsTheSame(oldItem: Data, newItem: Data): Boolean {
@@ -38,7 +40,7 @@ class PlantsListAdapter : RecyclerView.Adapter<PlantsViewHolder>(){
         position: Int
     ) {
         val plant = differ.currentList[position]
-        holder.bind(plant)
+        holder.bind(plant, listener)
     }
 
     override fun getItemCount(): Int {

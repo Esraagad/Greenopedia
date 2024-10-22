@@ -6,4 +6,10 @@
     <string name="label_plant_IPNI_status">Status</string>
     <string name="btn_retry">Retry</string>
     <string name="error_message_fail_to_connect">Network Failure</string>
+
+    <string name="toolbar_plant_details_screen">Plant Details</string>
+    <string name="btn_more_details">More Details</string>
+    <string name="label_plant_author">Author</string>
+    <string name="label_plant_index">Index</string>
+    <string name="label_plant_family">Family</string>
 </resources>
