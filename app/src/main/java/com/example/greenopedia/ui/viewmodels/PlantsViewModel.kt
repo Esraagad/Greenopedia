@@ -1,4 +1,7 @@
 package com.example.greenopedia.ui.viewmodels
 
-class PlantsViewModel {
+import androidx.lifecycle.ViewModel
+
+
+class PlantsViewModel: ViewModel() {
 }
