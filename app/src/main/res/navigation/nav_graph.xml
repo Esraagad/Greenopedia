@@ -25,5 +25,21 @@
         <argument
             android:name="plant"
             app:argType="com.example.greenopedia.data.remote.responses.Data" />
+        <action
+            android:id="@+id/action_plantDetailsFragment_to_moreDetailsWebViewFragment"
+            app:destination="@id/moreDetailsWebViewFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
+    <fragment
+        android:id="@+id/moreDetailsWebViewFragment"
+        android:name="com.example.greenopedia.ui.fragments.MoreDetailsWebViewFragment"
+        android:label="fragment_more_details_web_view"
+        tools:layout="@layout/fragment_more_details_web_view" >
+        <argument
+            android:name="scientificName"
+            app:argType="string" />
     </fragment>
 </navigation>
