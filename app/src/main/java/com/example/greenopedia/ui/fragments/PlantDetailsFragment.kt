@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.greenopedia.R
@@ -64,10 +65,16 @@ class PlantDetailsFragment : Fragment() {
             plantNameTextView.text = plant.commonName ?: "NA"
             plantFamilyTextView.text = plant.familyCommonName ?: "NA"
             plantAuthorTextView.text = plant.author ?: "NA"
-            //TODO:Check for nullability
-            plantIndexTextView.text = "${plant.bibliography}\n${plant.scientificName}"
+            plantIndexTextView.text =
+                "${plant.bibliography ?: "NA"}\n${plant.scientificName ?: "NA"}"
             moreDetailsButton.setOnClickListener {
-
+                val bundle = Bundle().apply {
+                    putString("scientificName", plant.scientificName)
+                }
+                findNavController().navigate(
+                    R.id.action_plantDetailsFragment_to_moreDetailsWebViewFragment,
+                    bundle
+                )
             }
         }
     }

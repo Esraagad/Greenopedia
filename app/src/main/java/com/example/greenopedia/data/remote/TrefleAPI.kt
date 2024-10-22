@@ -11,13 +11,13 @@ interface TrefleAPI {
 
     @GET("v1/plants")
     suspend fun getAllPlants(
-        @Query("token") apiToken: String = Constants.APT_Token,
+        @Query("token") apiToken: String = Constants.API_TOKEN,
         @Query("page") pageNumber: Int = 1
     ): Response<PlantsResponse>
 
     @GET("v1/distributions/{filter}/plants")
     suspend fun getAllPlantsBy(
-        @Query("token") apiToken: String = Constants.APT_Token,
+        @Query("token") apiToken: String = Constants.API_TOKEN,
         @Query("page") pageNumber: Int = 1,
         @Path("filter") filter: String
     ): Response<PlantsResponse>
