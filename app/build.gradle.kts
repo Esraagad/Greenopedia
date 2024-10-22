@@ -38,7 +38,6 @@ android {
     }
     buildFeatures {
         viewBinding = true
-        dataBinding = true
     }
 }
 
@@ -55,7 +54,7 @@ dependencies {
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
     implementation(libs.androidx.work.runtime.ktx)
-    kapt (libs.androidx.hilt.compiler)
+    kapt(libs.androidx.hilt.compiler)
 
     //navigation
     implementation(libs.navigation.fragment.ktx)
@@ -86,12 +85,12 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
 
     // Lifecycle
-    implementation (libs.androidx.lifecycle.extensions)
-    implementation (libs.androidx.lifecycle.livedata.ktx)
-    implementation (libs.androidx.lifecycle.runtime)
+    implementation(libs.androidx.lifecycle.extensions)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.lifecycle.runtime)
 
     // Activity KTX for viewModels()
-    implementation (libs.androidx.activity.ktx)
+    implementation(libs.androidx.activity.ktx)
 
 
 
