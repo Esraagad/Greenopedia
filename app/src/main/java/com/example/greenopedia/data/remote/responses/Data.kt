@@ -7,8 +7,6 @@ import java.io.Serializable
 
 @Entity(tableName = "plants")
 data class Data(
-    @PrimaryKey(autoGenerate = true)
-    var pid: Int,
     val author: String?,
     val bibliography: String?,
     @SerializedName("common_name")
@@ -19,6 +17,7 @@ data class Data(
     val genus: String?,
     @SerializedName("genus_id")
     val genusId: Int?,
+    @PrimaryKey(autoGenerate = true)
     @SerializedName("id")
     val plantId: Int?,
     @SerializedName("image_url")
@@ -31,5 +30,6 @@ data class Data(
     val status: String?,
     val synonyms: List<String>?,
     val year: Int?,
-    val timestamp: Long?
+    val timestamp: Long?,
+    var zone:String?
 ): Serializable
