@@ -12,6 +12,13 @@ class PlantsRepository @Inject constructor(
 ) : PlantsRepositoryImpl {
 
     override suspend fun getAllPlants(pageNum: Int): Response<PlantsResponse> =
-         trefleAPI.getAllPlants(pageNumber = pageNum)
+        trefleAPI.getAllPlants(pageNumber = pageNum)
+
+    override suspend fun getPlantsByFilter(
+        filterId: String,
+        pageNum: Int
+    ): Response<PlantsResponse> =
+        trefleAPI.getAllPlantsBy(filter = filterId, pageNumber = pageNum)
+
 
 }

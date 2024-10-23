@@ -31,13 +31,13 @@ class PlantsListFragment : Fragment(), OnPlantItemClickedListener, OnFilterItemC
     private lateinit var plantsListAdapter: PlantsListAdapter
     private lateinit var filtersAdapter: PlantsFiltersAdapter
     private lateinit var binding: FragmentPlantsListBinding
+    private var currentFilter = Filter.ALL
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         binding = FragmentPlantsListBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -77,6 +77,11 @@ class PlantsListFragment : Fragment(), OnPlantItemClickedListener, OnFilterItemC
                     hideProgressBar()
                     hideErrorMessage()
                     response.data?.let { plantsResponse ->
+
+                        if (isFilterChanged) {
+                            binding.plantsRecyclerView.smoothScrollToPosition(0)
+                            isFilterChanged = false
+                        }
                         plantsListAdapter.differ.submitList(plantsResponse.plantsList.toList())
                         val totalPages = plantsResponse.meta.total / QUERY_PAGE_SIZE + 2
                         isLastPage = viewModel.plantsPageNum == totalPages
@@ -99,11 +104,16 @@ class PlantsListFragment : Fragment(), OnPlantItemClickedListener, OnFilterItemC
                 is Resource.Loading -> {
                     showProgressBar()
                 }
+
+                else -> {}
             }
         }
 
         binding.itemErrorMessage.retryButton.setOnClickListener {
-            viewModel.getAllPlants()
+            if (currentFilter == Filter.fromDisplayName("All"))
+                viewModel.getAllPlants()
+            else
+                viewModel.getAllPlantsByFilter(currentFilter.id)
         }
     }
 
@@ -132,6 +142,7 @@ class PlantsListFragment : Fragment(), OnPlantItemClickedListener, OnFilterItemC
     var isLoading = false
     var isLastPage = false
     var isScrolling = false
+    var isFilterChanged = false
 
     private val customScrollListener = object : RecyclerView.OnScrollListener() {
         override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -157,7 +168,10 @@ class PlantsListFragment : Fragment(), OnPlantItemClickedListener, OnFilterItemC
             val shouldPaginate = isNotLoadingAndNotLastPage && isAtLastItem && isNotAtBeginning &&
                     isTotalMoreThanVisible && isScrolling
             if (shouldPaginate) {
-                viewModel.getAllPlants()
+                if (currentFilter == Filter.fromDisplayName("All"))
+                    viewModel.getAllPlants()
+                else
+                    viewModel.getAllPlantsByFilter(currentFilter.id)
                 isScrolling = false
             }
         }
@@ -180,6 +194,8 @@ class PlantsListFragment : Fragment(), OnPlantItemClickedListener, OnFilterItemC
     ) {
         //APICall
         filter?.id?.let {
+            isFilterChanged = true
+            viewModel.resetData()
             if (filter == Filter.fromDisplayName("All"))
                 viewModel.getAllPlants()
             else

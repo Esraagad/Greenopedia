@@ -27,8 +27,8 @@ class PlantsViewModel @Inject constructor(
     private val plantsRepository: PlantsRepositoryImpl,
     app: Application
 ) : AndroidViewModel(app) {
-    private var _plants = MutableLiveData<Resource<PlantsResponse>>()
-    val plants: LiveData<Resource<PlantsResponse>> = _plants
+    private var _plants = MutableLiveData<Resource<PlantsResponse>?>()
+    val plants: LiveData<Resource<PlantsResponse>?> = _plants
     private var plantsResponse: PlantsResponse? = null
     var plantsPageNum = 1
 
@@ -75,8 +75,35 @@ class PlantsViewModel @Inject constructor(
         return Resource.Error(response.message(), null)
     }
 
-    fun getAllPlantsByFilter(filterId: String) = viewModelScope.launch {
+    fun resetData(){
         //reset all livedata
+        plantsPageNum = 1
+        plantsResponse = null
+        _plants.value = null
+    }
+
+    fun getAllPlantsByFilter(filterId: String) = viewModelScope.launch {
+
+        _plants.postValue(Resource.Loading())
+        try {
+            if (hasInternetConnection()) {
+                val response = plantsRepository.getPlantsByFilter(filterId, plantsPageNum)
+                _plants.postValue(handlePlantsResponse(response))
+            } else {
+                _plants.postValue(Resource.Error(ErrorMessages.NOInternetConnection, null))
+            }
+        } catch (e: Exception) {
+            when (e) {
+                is IOException -> _plants.postValue(
+                    Resource.Error(
+                        ErrorMessages.NetworkFailur,
+                        null
+                    )
+                )
+
+                else -> _plants.postValue(Resource.Error(ErrorMessages.ConversionError, null))
+            }
+        }
     }
 
     private fun hasInternetConnection(): Boolean {

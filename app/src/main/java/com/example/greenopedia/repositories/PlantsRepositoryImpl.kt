@@ -7,4 +7,6 @@ interface PlantsRepositoryImpl {
 
     suspend fun getAllPlants(pageNum: Int): Response<PlantsResponse>
 
+    suspend fun getPlantsByFilter(filterId: String, pageNum: Int): Response<PlantsResponse>
+
 }
