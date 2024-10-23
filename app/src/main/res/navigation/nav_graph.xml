@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/plantsListFragment"
         android:name="com.example.greenopedia.ui.fragments.PlantsListFragment"
-        android:label="PlantsListFragment">
+        android:label="Plants">
         <action
             android:id="@+id/action_plantsListFragment_to_plantDetailsFragment"
             app:destination="@id/plantDetailsFragment"
@@ -17,10 +17,11 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
     </fragment>
+
     <fragment
         android:id="@+id/plantDetailsFragment"
         android:name="com.example.greenopedia.ui.fragments.PlantDetailsFragment"
-        android:label="fragment_plant_details"
+        android:label="Plant Details"
         tools:layout="@layout/fragment_plant_details" >
         <argument
             android:name="plant"
@@ -33,10 +34,11 @@
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
+
     <fragment
         android:id="@+id/moreDetailsWebViewFragment"
         android:name="com.example.greenopedia.ui.fragments.MoreDetailsWebViewFragment"
-        android:label="fragment_more_details_web_view"
+        android:label="Plant more details"
         tools:layout="@layout/fragment_more_details_web_view" >
         <argument
             android:name="scientificName"

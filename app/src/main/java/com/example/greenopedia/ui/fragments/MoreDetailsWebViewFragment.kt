@@ -6,6 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebViewClient
+import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.greenopedia.databinding.FragmentMoreDetailsWebViewBinding
 import com.example.greenopedia.utils.Constants
@@ -30,6 +33,25 @@ class MoreDetailsWebViewFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         scientificName = args.scientificName
         loadPlantDetailsWebView()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setupToolbar()
+    }
+
+    private fun setupToolbar() {
+        (activity as? AppCompatActivity)?.supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            title = scientificName
+        }
+
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().popBackStack()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
     }
 
     private fun loadPlantDetailsWebView() {

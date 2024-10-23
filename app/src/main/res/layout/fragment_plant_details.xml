@@ -4,17 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:title="@string/toolbar_plant_details_screen"
-        android:titleTextColor="@android:color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -22,7 +11,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar">
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -66,7 +55,8 @@
                 app:layout_constraintEnd_toEndOf="@id/endGuideline"
                 app:layout_constraintHeight_percent="0.4"
                 app:layout_constraintStart_toStartOf="@id/startGuideline"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:contentDescription="@string/cd_plant_image_view"/>
 
             <TextView
                 android:id="@+id/plantNameLabelTextView"
@@ -74,7 +64,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/label_plant_name"
-                android:textSize="16sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@id/startGuideline"
                 app:layout_constraintTop_toBottomOf="@id/plantImageView" />
@@ -83,11 +73,12 @@
                 android:id="@+id/plantNameTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:textSize="14sp"
+                android:textSize="18sp"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="@id/endGuideline"
                 app:layout_constraintStart_toEndOf="@id/fieldsGuideline"
-                app:layout_constraintTop_toBottomOf="@id/plantImageView" />
+                app:layout_constraintTop_toTopOf="@id/plantNameLabelTextView"
+                app:layout_constraintBottom_toBottomOf="@id/plantNameLabelTextView"/>
 
             <TextView
                 android:id="@+id/plantFamilyLabelTextView"
@@ -95,7 +86,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/label_plant_family"
-                android:textSize="16sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@id/startGuideline"
                 app:layout_constraintTop_toBottomOf="@id/plantNameLabelTextView" />
@@ -104,11 +95,12 @@
                 android:id="@+id/plantFamilyTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:textSize="14sp"
+                android:textSize="18sp"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="@id/endGuideline"
                 app:layout_constraintStart_toEndOf="@id/fieldsGuideline"
-                app:layout_constraintTop_toBottomOf="@id/plantNameTextView" />
+                app:layout_constraintTop_toTopOf="@id/plantFamilyLabelTextView"
+                app:layout_constraintBottom_toBottomOf="@id/plantFamilyLabelTextView" />
 
             <TextView
                 android:id="@+id/plantIndexLabelTextView"
@@ -116,7 +108,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/label_plant_index"
-                android:textSize="16sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@id/startGuideline"
                 app:layout_constraintTop_toBottomOf="@id/plantFamilyLabelTextView" />
@@ -125,11 +117,12 @@
                 android:id="@+id/plantIndexTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:textSize="14sp"
+                android:textSize="18sp"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="@id/endGuideline"
                 app:layout_constraintStart_toEndOf="@id/fieldsGuideline"
-                app:layout_constraintTop_toBottomOf="@id/plantFamilyTextView" />
+                app:layout_constraintTop_toTopOf="@id/plantIndexLabelTextView"
+                app:layout_constraintBottom_toBottomOf="@id/plantIndexLabelTextView"  />
 
             <TextView
                 android:id="@+id/plantAuthorLabelTextView"
@@ -137,7 +130,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/label_plant_author"
-                android:textSize="16sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="@id/startGuideline"
                 app:layout_constraintTop_toBottomOf="@id/plantIndexTextView" />
@@ -146,11 +139,12 @@
                 android:id="@+id/plantAuthorTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:textSize="14sp"
+                android:textSize="18sp"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="@id/endGuideline"
                 app:layout_constraintStart_toEndOf="@id/fieldsGuideline"
-                app:layout_constraintTop_toBottomOf="@id/plantIndexTextView" />
+                app:layout_constraintTop_toTopOf="@id/plantAuthorLabelTextView"
+                app:layout_constraintBottom_toBottomOf="@id/plantAuthorLabelTextView"  />
 
             <Button
                 android:id="@+id/more_details_button"
