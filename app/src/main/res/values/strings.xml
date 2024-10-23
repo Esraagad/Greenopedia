@@ -8,6 +8,7 @@
     <string name="error_message_fail_to_connect">Network Failure</string>
 
     <string name="toolbar_plant_details_screen">Plant Details</string>
+    <string name="toolbar_plants_list_screen">Plants</string>
     <string name="btn_more_details">More Details</string>
     <string name="label_plant_author">Author</string>
     <string name="label_plant_index">Index</string>

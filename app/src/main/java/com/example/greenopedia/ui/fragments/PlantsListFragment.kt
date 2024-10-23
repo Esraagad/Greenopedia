@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -19,12 +20,16 @@ import com.example.greenopedia.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import com.example.greenopedia.R
 import com.example.greenopedia.data.remote.responses.Data
-import com.example.greenopedia.ui.OnItemClickListener
+import com.example.greenopedia.ui.OnFilterItemClickedListener
+import com.example.greenopedia.ui.OnPlantItemClickedListener
+import com.example.greenopedia.ui.adapters.PlantsFiltersAdapter
+import com.example.greenopedia.utils.Filter
 
 @AndroidEntryPoint
-class PlantsListFragment : Fragment(), OnItemClickListener {
+class PlantsListFragment : Fragment(), OnPlantItemClickedListener, OnFilterItemClickedListener {
     private val viewModel: PlantsViewModel by viewModels()
     private lateinit var plantsListAdapter: PlantsListAdapter
+    private lateinit var filtersAdapter: PlantsFiltersAdapter
     private lateinit var binding: FragmentPlantsListBinding
 
     override fun onCreateView(
@@ -40,6 +45,7 @@ class PlantsListFragment : Fragment(), OnItemClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupPlantsRecyclerView()
+        setUpFiltersRecyclerView()
         observePlants()
     }
 
@@ -51,6 +57,18 @@ class PlantsListFragment : Fragment(), OnItemClickListener {
             addOnScrollListener(customScrollListener)
         }
     }
+
+    private fun setUpFiltersRecyclerView() {
+
+        val filters = listOf("All", "Palestine", "Sudan", "Myanmar", "Transcaucasus", "Uzbekistan")
+        filtersAdapter = PlantsFiltersAdapter(filters, this)
+
+        binding.filtersRecyclerView.apply {
+            adapter = filtersAdapter
+            layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+        }
+    }
+
 
     private fun observePlants() {
         viewModel.plants.observe(viewLifecycleOwner) { response ->
@@ -145,13 +163,30 @@ class PlantsListFragment : Fragment(), OnItemClickListener {
         }
     }
 
-    override fun onItemClicked(plant: Data) {
-            val bundle = Bundle().apply {
-                putSerializable("plant", plant)
-            }
-            findNavController().navigate(
-                R.id.action_plantsListFragment_to_plantDetailsFragment,
-                bundle
-            )
+    override fun onPlantItemClicked(plant: Data) {
+        val bundle = Bundle().apply {
+            putSerializable("plant", plant)
+        }
+        findNavController().navigate(
+            R.id.action_plantsListFragment_to_plantDetailsFragment,
+            bundle
+        )
+    }
+
+    override fun onFilterItemClicked(
+        filter: Filter?,
+        oldPosition: Int,
+        currentPosition: Int
+    ) {
+        //APICall
+        filter?.id?.let {
+            if (filter == Filter.fromDisplayName("All"))
+                viewModel.getAllPlants()
+            else
+                viewModel.getAllPlantsByFilter(filter.id)
+        }
+        //notify adapter
+        filtersAdapter.notifyItemChanged(oldPosition)
+        filtersAdapter.notifyItemChanged(currentPosition)
     }
 }

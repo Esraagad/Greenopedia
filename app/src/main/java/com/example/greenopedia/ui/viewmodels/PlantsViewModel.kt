@@ -53,6 +53,7 @@ class PlantsViewModel @Inject constructor(
                         null
                     )
                 )
+
                 else -> _plants.postValue(Resource.Error(ErrorMessages.ConversionError, null))
             }
         }
@@ -72,6 +73,10 @@ class PlantsViewModel @Inject constructor(
             }
         }
         return Resource.Error(response.message(), null)
+    }
+
+    fun getAllPlantsByFilter(filterId: String) = viewModelScope.launch {
+        //reset all livedata
     }
 
     private fun hasInternetConnection(): Boolean {
