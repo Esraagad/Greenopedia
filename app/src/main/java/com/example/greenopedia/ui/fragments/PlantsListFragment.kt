@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -44,6 +43,7 @@ class PlantsListFragment : Fragment(), OnPlantItemClickedListener, OnFilterItemC
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         setupPlantsRecyclerView()
         setUpFiltersRecyclerView()
         observePlants()
@@ -59,7 +59,6 @@ class PlantsListFragment : Fragment(), OnPlantItemClickedListener, OnFilterItemC
     }
 
     private fun setUpFiltersRecyclerView() {
-
         val filters = listOf("All", "Palestine", "Sudan", "Myanmar", "Transcaucasus", "Uzbekistan")
         filtersAdapter = PlantsFiltersAdapter(filters, this)
 
@@ -68,7 +67,6 @@ class PlantsListFragment : Fragment(), OnPlantItemClickedListener, OnFilterItemC
             layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         }
     }
-
 
     private fun observePlants() {
         viewModel.plants.observe(viewLifecycleOwner) { response ->
@@ -192,7 +190,6 @@ class PlantsListFragment : Fragment(), OnPlantItemClickedListener, OnFilterItemC
         oldPosition: Int,
         currentPosition: Int
     ) {
-        //APICall
         filter?.id?.let {
             isFilterChanged = true
             viewModel.resetData()
@@ -201,7 +198,7 @@ class PlantsListFragment : Fragment(), OnPlantItemClickedListener, OnFilterItemC
             else
                 viewModel.getAllPlantsByFilter(filter.id)
         }
-        //notify adapter
+
         filtersAdapter.notifyItemChanged(oldPosition)
         filtersAdapter.notifyItemChanged(currentPosition)
     }

@@ -43,18 +43,18 @@ class PlantsViewModel @Inject constructor(
                 val response = plantsRepository.getAllPlants(plantsPageNum)
                 _plants.postValue(handlePlantsResponse(response))
             } else {
-                _plants.postValue(Resource.Error(ErrorMessages.NOInternetConnection, null))
+                _plants.postValue(Resource.Error(ErrorMessages.NO_INTERNET_CONNECTION, null))
             }
         } catch (e: Exception) {
             when (e) {
                 is IOException -> _plants.postValue(
                     Resource.Error(
-                        ErrorMessages.NetworkFailur,
+                        ErrorMessages.NETWORK_FAILURE,
                         null
                     )
                 )
 
-                else -> _plants.postValue(Resource.Error(ErrorMessages.ConversionError, null))
+                else -> _plants.postValue(Resource.Error(ErrorMessages.CONVERSION_ERROR, null))
             }
         }
     }
@@ -90,18 +90,18 @@ class PlantsViewModel @Inject constructor(
                 val response = plantsRepository.getPlantsByFilter(filterId, plantsPageNum)
                 _plants.postValue(handlePlantsResponse(response))
             } else {
-                _plants.postValue(Resource.Error(ErrorMessages.NOInternetConnection, null))
+                _plants.postValue(Resource.Error(ErrorMessages.NO_INTERNET_CONNECTION, null))
             }
         } catch (e: Exception) {
             when (e) {
                 is IOException -> _plants.postValue(
                     Resource.Error(
-                        ErrorMessages.NetworkFailur,
+                        ErrorMessages.NETWORK_FAILURE,
                         null
                     )
                 )
 
-                else -> _plants.postValue(Resource.Error(ErrorMessages.ConversionError, null))
+                else -> _plants.postValue(Resource.Error(ErrorMessages.CONVERSION_ERROR, null))
             }
         }
     }

@@ -52,6 +52,7 @@ dependencies {
 
     //hilt
     implementation(libs.hilt.android)
+    implementation(libs.androidx.fragment)
     kapt(libs.hilt.compiler)
     implementation(libs.androidx.work.runtime.ktx)
     kapt(libs.androidx.hilt.compiler)
