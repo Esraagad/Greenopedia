@@ -5,12 +5,12 @@ import com.bumptech.glide.Glide
 import com.example.greenopedia.data.remote.responses.Data
 import com.example.greenopedia.databinding.ItemPlantBinding
 import com.example.greenopedia.R
-import com.example.greenopedia.ui.OnItemClickListener
+import com.example.greenopedia.ui.OnPlantItemClickedListener
 
 class PlantsViewHolder(private val binding: ItemPlantBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(plant: Data, listener: OnItemClickListener) {
+    fun bind(plant: Data, listener: OnPlantItemClickedListener) {
         binding.apply {
             Glide.with(binding.root.context)
                 .load(plant.imageUrl)
@@ -21,7 +21,7 @@ class PlantsViewHolder(private val binding: ItemPlantBinding) :
             plantYearTextView.text = plant.year?.toString()?:"NA"
             plantStatusTextView.text = plant.status?: "NA"
             itemView.setOnClickListener {
-                listener.onItemClicked(plant)
+                listener.onPlantItemClicked(plant)
             }
         }
     }

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -19,20 +20,24 @@ import com.example.greenopedia.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import com.example.greenopedia.R
 import com.example.greenopedia.data.remote.responses.Data
-import com.example.greenopedia.ui.OnItemClickListener
+import com.example.greenopedia.ui.OnFilterItemClickedListener
+import com.example.greenopedia.ui.OnPlantItemClickedListener
+import com.example.greenopedia.ui.adapters.PlantsFiltersAdapter
+import com.example.greenopedia.utils.Filter
 
 @AndroidEntryPoint
-class PlantsListFragment : Fragment(), OnItemClickListener {
+class PlantsListFragment : Fragment(), OnPlantItemClickedListener, OnFilterItemClickedListener {
     private val viewModel: PlantsViewModel by viewModels()
     private lateinit var plantsListAdapter: PlantsListAdapter
+    private lateinit var filtersAdapter: PlantsFiltersAdapter
     private lateinit var binding: FragmentPlantsListBinding
+    private var currentFilter = Filter.ALL
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         binding = FragmentPlantsListBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -40,6 +45,7 @@ class PlantsListFragment : Fragment(), OnItemClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupPlantsRecyclerView()
+        setUpFiltersRecyclerView()
         observePlants()
     }
 
@@ -52,6 +58,18 @@ class PlantsListFragment : Fragment(), OnItemClickListener {
         }
     }
 
+    private fun setUpFiltersRecyclerView() {
+
+        val filters = listOf("All", "Palestine", "Sudan", "Myanmar", "Transcaucasus", "Uzbekistan")
+        filtersAdapter = PlantsFiltersAdapter(filters, this)
+
+        binding.filtersRecyclerView.apply {
+            adapter = filtersAdapter
+            layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+        }
+    }
+
+
     private fun observePlants() {
         viewModel.plants.observe(viewLifecycleOwner) { response ->
             when (response) {
@@ -59,6 +77,11 @@ class PlantsListFragment : Fragment(), OnItemClickListener {
                     hideProgressBar()
                     hideErrorMessage()
                     response.data?.let { plantsResponse ->
+
+                        if (isFilterChanged) {
+                            binding.plantsRecyclerView.smoothScrollToPosition(0)
+                            isFilterChanged = false
+                        }
                         plantsListAdapter.differ.submitList(plantsResponse.plantsList.toList())
                         val totalPages = plantsResponse.meta.total / QUERY_PAGE_SIZE + 2
                         isLastPage = viewModel.plantsPageNum == totalPages
@@ -81,11 +104,16 @@ class PlantsListFragment : Fragment(), OnItemClickListener {
                 is Resource.Loading -> {
                     showProgressBar()
                 }
+
+                else -> {}
             }
         }
 
         binding.itemErrorMessage.retryButton.setOnClickListener {
-            viewModel.getAllPlants()
+            if (currentFilter == Filter.fromDisplayName("All"))
+                viewModel.getAllPlants()
+            else
+                viewModel.getAllPlantsByFilter(currentFilter.id)
         }
     }
 
@@ -114,6 +142,7 @@ class PlantsListFragment : Fragment(), OnItemClickListener {
     var isLoading = false
     var isLastPage = false
     var isScrolling = false
+    var isFilterChanged = false
 
     private val customScrollListener = object : RecyclerView.OnScrollListener() {
         override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -139,19 +168,41 @@ class PlantsListFragment : Fragment(), OnItemClickListener {
             val shouldPaginate = isNotLoadingAndNotLastPage && isAtLastItem && isNotAtBeginning &&
                     isTotalMoreThanVisible && isScrolling
             if (shouldPaginate) {
-                viewModel.getAllPlants()
+                if (currentFilter == Filter.fromDisplayName("All"))
+                    viewModel.getAllPlants()
+                else
+                    viewModel.getAllPlantsByFilter(currentFilter.id)
                 isScrolling = false
             }
         }
     }
 
-    override fun onItemClicked(plant: Data) {
-            val bundle = Bundle().apply {
-                putSerializable("plant", plant)
-            }
-            findNavController().navigate(
-                R.id.action_plantsListFragment_to_plantDetailsFragment,
-                bundle
-            )
+    override fun onPlantItemClicked(plant: Data) {
+        val bundle = Bundle().apply {
+            putSerializable("plant", plant)
+        }
+        findNavController().navigate(
+            R.id.action_plantsListFragment_to_plantDetailsFragment,
+            bundle
+        )
+    }
+
+    override fun onFilterItemClicked(
+        filter: Filter?,
+        oldPosition: Int,
+        currentPosition: Int
+    ) {
+        //APICall
+        filter?.id?.let {
+            isFilterChanged = true
+            viewModel.resetData()
+            if (filter == Filter.fromDisplayName("All"))
+                viewModel.getAllPlants()
+            else
+                viewModel.getAllPlantsByFilter(filter.id)
+        }
+        //notify adapter
+        filtersAdapter.notifyItemChanged(oldPosition)
+        filtersAdapter.notifyItemChanged(currentPosition)
     }
 }

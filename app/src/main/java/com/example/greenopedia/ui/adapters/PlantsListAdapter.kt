@@ -7,10 +7,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.greenopedia.data.remote.responses.Data
 import com.example.greenopedia.databinding.ItemPlantBinding
-import com.example.greenopedia.ui.OnItemClickListener
+import com.example.greenopedia.ui.OnPlantItemClickedListener
 import com.example.greenopedia.ui.viewholders.PlantsViewHolder
 
-class PlantsListAdapter(val listener: OnItemClickListener) :
+class PlantsListAdapter(val listener: OnPlantItemClickedListener) :
     RecyclerView.Adapter<PlantsViewHolder>() {
 
     private val differCallback = object : DiffUtil.ItemCallback<Data>() {

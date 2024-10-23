@@ -17,8 +17,8 @@ interface TrefleAPI {
 
     @GET("v1/distributions/{filter}/plants")
     suspend fun getAllPlantsBy(
+        @Path("filter") filter: String,
         @Query("token") apiToken: String = Constants.API_TOKEN,
-        @Query("page") pageNumber: Int = 1,
-        @Path("filter") filter: String
+        @Query("page") pageNumber: Int = 1
     ): Response<PlantsResponse>
 }
