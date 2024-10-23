@@ -17,7 +17,6 @@ import com.example.greenopedia.utils.ErrorMessages
 import com.example.greenopedia.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import retrofit2.Response
 import java.io.IOException
 import javax.inject.Inject
 
@@ -27,6 +26,7 @@ class PlantsViewModel @Inject constructor(
     private val plantsRepository: PlantsRepositoryImpl,
     app: Application
 ) : AndroidViewModel(app) {
+
     private var _plants = MutableLiveData<Resource<PlantsResponse>?>()
     val plants: LiveData<Resource<PlantsResponse>?> = _plants
     private var plantsResponse: PlantsResponse? = null
@@ -40,42 +40,41 @@ class PlantsViewModel @Inject constructor(
         _plants.postValue(Resource.Loading())
         try {
             if (hasInternetConnection()) {
-                val response = plantsRepository.getAllPlants(plantsPageNum)
+                val response =
+                    plantsRepository.fetchAllPlants(plantsPageNum)
                 _plants.postValue(handlePlantsResponse(response))
             } else {
-                _plants.postValue(Resource.Error(ErrorMessages.NO_INTERNET_CONNECTION, null))
+                _plants.postValue(plantsRepository.loadLocalPlants())
             }
         } catch (e: Exception) {
             when (e) {
                 is IOException -> _plants.postValue(
-                    Resource.Error(
-                        ErrorMessages.NETWORK_FAILURE,
-                        null
-                    )
+                    Resource.Error(ErrorMessages.NETWORK_FAILURE, null)
                 )
 
-                else -> _plants.postValue(Resource.Error(ErrorMessages.CONVERSION_ERROR, null))
+                else -> _plants.postValue(
+                    Resource.Error(ErrorMessages.CONVERSION_ERROR, null)
+                )
             }
         }
     }
 
-    private fun handlePlantsResponse(response: Response<PlantsResponse>): Resource<PlantsResponse> {
-        if (response.isSuccessful) {
-            response.body()?.let { resultResponse ->
-                plantsPageNum++
-                if (plantsResponse == null) {
-                    plantsResponse = resultResponse
-                } else {
-                    val newPlants = resultResponse.plantsList
-                    plantsResponse?.plantsList?.addAll(newPlants)
-                }
-                return Resource.Success(plantsResponse ?: resultResponse)
+    private fun handlePlantsResponse(response: Resource<PlantsResponse>): Resource<PlantsResponse> {
+        response.data?.let { resultResponse ->
+            plantsPageNum++
+            if (plantsResponse == null) {
+                plantsResponse = resultResponse
+            } else {
+                val newPlants = resultResponse.plantsList
+                newPlants.let { plantsResponse?.plantsList?.addAll(it) }
             }
+            return Resource.Success(plantsResponse ?: resultResponse)
         }
-        return Resource.Error(response.message(), null)
+
+        return Resource.Error(response.message ?: ErrorMessages.UNKNOWN_ERROR, null)
     }
 
-    fun resetData(){
+    fun resetData() {
         //reset all livedata
         plantsPageNum = 1
         plantsResponse = null
@@ -87,10 +86,10 @@ class PlantsViewModel @Inject constructor(
         _plants.postValue(Resource.Loading())
         try {
             if (hasInternetConnection()) {
-                val response = plantsRepository.getPlantsByFilter(filterId, plantsPageNum)
+                val response = plantsRepository.fetchPlantsByFilter(filterId, plantsPageNum)
                 _plants.postValue(handlePlantsResponse(response))
             } else {
-                _plants.postValue(Resource.Error(ErrorMessages.NO_INTERNET_CONNECTION, null))
+                _plants.postValue(plantsRepository.loadLocalPlantsByFilter(filterId))
             }
         } catch (e: Exception) {
             when (e) {

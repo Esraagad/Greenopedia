@@ -8,6 +8,7 @@ import android.widget.AbsListView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,6 +24,8 @@ import com.example.greenopedia.ui.OnFilterItemClickedListener
 import com.example.greenopedia.ui.OnPlantItemClickedListener
 import com.example.greenopedia.ui.adapters.PlantsFiltersAdapter
 import com.example.greenopedia.utils.Filter
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class PlantsListFragment : Fragment(), OnPlantItemClickedListener, OnFilterItemClickedListener {
@@ -76,16 +79,25 @@ class PlantsListFragment : Fragment(), OnPlantItemClickedListener, OnFilterItemC
                     hideErrorMessage()
                     response.data?.let { plantsResponse ->
 
+                        plantsListAdapter.differ.submitList(
+                            if (isFilterChanged) {
+                                emptyList()
+                            } else {
+                                plantsResponse.plantsList.toList()
+                            }
+                        ) {
+                            plantsListAdapter.differ.submitList(plantsResponse.plantsList.toList())
+                            val totalPages = plantsResponse.meta.total / QUERY_PAGE_SIZE + 2
+                            isLastPage = viewModel.plantsPageNum == totalPages
+
+                            if (isLastPage) {
+                                binding.plantsRecyclerView.setPadding(0, 0, 0, 0)
+                            }
+                        }
+
                         if (isFilterChanged) {
                             binding.plantsRecyclerView.smoothScrollToPosition(0)
                             isFilterChanged = false
-                        }
-                        plantsListAdapter.differ.submitList(plantsResponse.plantsList.toList())
-                        val totalPages = plantsResponse.meta.total / QUERY_PAGE_SIZE + 2
-                        isLastPage = viewModel.plantsPageNum == totalPages
-
-                        if (isLastPage) {
-                            binding.plantsRecyclerView.setPadding(0, 0, 0, 0)
                         }
                     }
                 }
