@@ -42,13 +42,11 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-
 
     //hilt
     implementation(libs.hilt.android)
@@ -93,13 +91,23 @@ dependencies {
     // Activity KTX for viewModels()
     implementation(libs.androidx.activity.ktx)
 
-    implementation (libs.gson)
+    //GSOn
+    implementation(libs.gson)
 
-
-
-
-
+    //Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    //Truth for testing readability
+    testImplementation(libs.truth)
+    androidTestImplementation(libs.truth)
+
+    // Coroutines testing
+    testImplementation(libs.kotlinx.coroutines.test)
+    androidTestImplementation(libs.kotlinx.coroutines.test)
+
+    // Mockito for mocking
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.kotlin.mockito.kotlin)
 }

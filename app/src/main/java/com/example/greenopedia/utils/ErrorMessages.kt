@@ -5,4 +5,5 @@ object ErrorMessages {
     const val NO_INTERNET_CONNECTION = "Please check your internet connection."
     const val CONVERSION_ERROR = "Conversion Error"
     const val NETWORK_FAILURE = "Network Failure"
+    const val DATABASE_ERROR = "Offline Mode Failure"
 }
