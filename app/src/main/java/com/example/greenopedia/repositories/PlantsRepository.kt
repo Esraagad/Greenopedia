@@ -60,7 +60,7 @@ class PlantsRepository @Inject constructor(
             null,
             Meta(0)
         )
-        val count = getPlantsCount()
+        val count = plantsDao.getCount()
         val plants = plantsDao.getAllPlants()
         plants.let {
             localsResponse.plantsList = plants as MutableList<Data>
@@ -70,24 +70,20 @@ class PlantsRepository @Inject constructor(
         return Resource.Success(localsResponse)
     }
 
-    override suspend fun loadLocalPlantsByFilter(zone:String): Resource<PlantsResponse> {
+    override suspend fun loadLocalPlantsByFilter(zone: String): Resource<PlantsResponse> {
         var localsResponse = PlantsResponse(
             mutableListOf(),
             null,
             Meta(0)
         )
-        val count = getPlantsCount()
+        val count = plantsDao.getCount()
         val plants = plantsDao.getPlantsByFilter(zone)
         plants.let {
             localsResponse.plantsList = plants as MutableList<Data>
             localsResponse.links = null
             localsResponse.meta = Meta(count)
         }
-        return Resource.Success(localsResponse)    }
-
-    override suspend fun insertAllPlants(plants: List<Data>) =
-        plantsDao.insertAllPlants(plants)
-
-    override suspend fun getPlantsCount(): Int = plantsDao.getCount()
+        return Resource.Success(localsResponse)
+    }
 
 }
