@@ -27,7 +27,7 @@ class PlantsRepository @Inject constructor(
                 Resource.Error(response.message())
             }
         } catch (e: Exception) {
-            Resource.Error(ErrorMessages.NO_INTERNET_CONNECTION)
+            Resource.Error(ErrorMessages.UNKNOWN_ERROR)
         }
     }
 
@@ -50,40 +50,47 @@ class PlantsRepository @Inject constructor(
                 Resource.Error(response.message())
             }
         } catch (e: Exception) {
-            Resource.Error(ErrorMessages.NO_INTERNET_CONNECTION)
+            Resource.Error(ErrorMessages.UNKNOWN_ERROR)
         }
     }
 
     override suspend fun loadLocalPlants(): Resource<PlantsResponse> {
-        var localsResponse = PlantsResponse(
-            mutableListOf(),
-            null,
-            Meta(0)
-        )
-        val count = plantsDao.getCount()
-        val plants = plantsDao.getAllPlants()
-        plants.let {
-            localsResponse.plantsList = plants as MutableList<Data>
-            localsResponse.links = null
-            localsResponse.meta = Meta(count)
+        try {
+            var localsResponse = PlantsResponse(
+                mutableListOf(),
+                null,
+                Meta(0)
+            )
+            val count = plantsDao.getCount()
+            val plants = plantsDao.getAllPlants()
+            plants.let {
+                localsResponse.plantsList = plants as MutableList<Data>
+                localsResponse.links = null
+                localsResponse.meta = Meta(count)
+            }
+            return Resource.Success(localsResponse)
+        } catch (e: Exception) {
+            return Resource.Error(ErrorMessages.DATABASE_ERROR)
         }
-        return Resource.Success(localsResponse)
     }
 
     override suspend fun loadLocalPlantsByFilter(zone: String): Resource<PlantsResponse> {
-        var localsResponse = PlantsResponse(
-            mutableListOf(),
-            null,
-            Meta(0)
-        )
-        val count = plantsDao.getCount()
-        val plants = plantsDao.getPlantsByFilter(zone)
-        plants.let {
-            localsResponse.plantsList = plants as MutableList<Data>
-            localsResponse.links = null
-            localsResponse.meta = Meta(count)
+        try {
+            var localsResponse = PlantsResponse(
+                mutableListOf(),
+                null,
+                Meta(0)
+            )
+            val count = plantsDao.getCount()
+            val plants = plantsDao.getPlantsByFilter(zone)
+            plants.let {
+                localsResponse.plantsList = plants as MutableList<Data>
+                localsResponse.links = null
+                localsResponse.meta = Meta(count)
+            }
+            return Resource.Success(localsResponse)
+        } catch (e: Exception) {
+            return Resource.Error(ErrorMessages.DATABASE_ERROR)
         }
-        return Resource.Success(localsResponse)
     }
-
 }
